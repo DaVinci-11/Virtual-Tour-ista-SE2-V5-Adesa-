@@ -1,0 +1,48 @@
+// src/components/videoModal.js
+export function videoModal() {
+  // Create modal container
+  const modal = document.createElement("div");
+  modal.style.position = "fixed";
+  modal.style.top = 0;
+  modal.style.left = 0;
+  modal.style.width = "100%";
+  modal.style.height = "100%";
+  modal.style.background = "rgba(41, 0, 0, 0.8)";
+  modal.style.display = "none";
+  modal.style.alignItems = "center";
+  modal.style.justifyContent = "center";
+  modal.style.zIndex = 4000;
+
+  // Create video element
+  const videoEl = document.createElement("video");
+  videoEl.controls = true;
+  videoEl.autoplay = true;
+  videoEl.style.width = "80%";
+  videoEl.style.height = "auto";
+  videoEl.style.maxHeight = "80%";
+  videoEl.style.borderRadius = "10px";
+  videoEl.style.boxShadow = "0 0 100px rgba(255,255,255,0.5)"; // glow effect
+
+  // Create close button
+  const closeBtn = document.createElement("button");
+  closeBtn.innerText = "Close";
+  closeBtn.style.position = "absolute";
+  closeBtn.style.top = "20px";
+  closeBtn.style.right = "20px";
+  closeBtn.style.padding = "10px 20px";
+  closeBtn.style.fontSize = "16px";
+  closeBtn.style.cursor = "pointer";
+
+  closeBtn.onclick = () => {
+    videoEl.pause();
+    modal.style.display = "none";
+  };
+
+  // Append elements to modal
+  modal.appendChild(videoEl);
+  modal.appendChild(closeBtn);
+  document.body.appendChild(modal);
+
+  // Return references
+  return { modal, videoEl, closeBtn };
+}

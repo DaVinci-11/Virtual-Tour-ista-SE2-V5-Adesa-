@@ -1,0 +1,105 @@
+export function createArtifactModal() {
+  const modal = document.createElement("div");
+  modal.style.position = "fixed";
+  modal.style.top = 0;
+  modal.style.left = 0;
+  modal.style.width = "100%";
+  modal.style.height = "100%";
+  modal.style.background = "rgba(0,0,0,0.85)";
+  modal.style.display = "none";
+  modal.style.flexDirection = "column";
+  modal.style.justifyContent = "center";
+  modal.style.alignItems = "center";
+  modal.style.color = "#fff";
+  modal.style.zIndex = 2000;
+  modal.style.padding = "20px";
+  modal.style.textAlign = "center";
+
+  const modalImg = document.createElement("img");
+  modalImg.style.maxWidth = "80%";
+  modalImg.style.maxHeight = "80%";
+  modalImg.style.marginBottom = "20px";
+  modalImg.style.borderRadius = "10px";
+  modalImg.style.boxShadow = "0 0 100px rgba(255,255,255,0.5)";
+
+  const modalTitle = document.createElement("h2");
+  modalTitle.style.fontWeight = "bold";
+  modalTitle.style.fontSize = "2.8em";
+  modalTitle.style.marginBottom = "10px";
+
+  const modalDesc = document.createElement("p");
+  modalDesc.style.fontStyle = "italic";
+  modalDesc.style.whiteSpace = "pre-line";
+  modalDesc.style.opacity = 0; // start invisible
+  modalDesc.style.transition = "opacity 1s ease-in-out"; // fade-in
+
+  const audioDescBtn = document.createElement("button");
+  audioDescBtn.innerText = "Play Audio Description";
+  audioDescBtn.style.marginTop = "10px";
+  audioDescBtn.style.padding = "8px 16px";
+  audioDescBtn.style.fontSize = "18px";
+  audioDescBtn.style.cursor = "pointer";
+
+  const closeBtn = document.createElement("button");
+  closeBtn.innerText = "Close";
+  closeBtn.style.marginTop = "20px";
+  closeBtn.style.padding = "10px 20px";
+  closeBtn.style.fontSize = "25px";
+  closeBtn.style.cursor = "pointer";
+
+  modal.appendChild(modalImg);
+  modal.appendChild(modalTitle);
+  modal.appendChild(modalDesc);
+  modal.appendChild(audioDescBtn);
+  modal.appendChild(closeBtn);
+  document.body.appendChild(modal);
+
+  // --- Pulsing glow logic ---
+  let glowInterval = null;
+
+  function startImageGlowPulse() {
+    let opacity = 0.7;
+    let increasing = true;
+
+    glowInterval = setInterval(() => {
+      if (increasing) {
+        opacity += 0.01;
+        if (opacity >= 1.0) increasing = false;
+      } else {
+        opacity -= 0.01;
+        if (opacity <= 0.7) increasing = true;
+      }
+      modalImg.style.boxShadow = `0 0 50px rgba(255,255,255,${opacity})`;
+    }, 16); // roughly 60fps
+  }
+
+  function stopImageGlowPulse() {
+    clearInterval(glowInterval);
+    modalImg.style.boxShadow = "0 0 50px rgba(255,255,255,0.5)";
+  }
+
+  // --- Close button logic ---
+  closeBtn.onclick = () => {
+    modal.style.display = "none";
+    modalDesc.style.opacity = 0;
+    stopImageGlowPulse();
+  };
+
+  // --- Show description helper ---
+  function showDescription(text) {
+    modalDesc.innerText = text;
+    modalDesc.style.opacity = 1; // fade in
+  }
+
+  return { 
+    modal, 
+    modalImg, 
+    modalTitle, 
+    modalDesc, 
+    closeBtn, 
+    audioDescBtn,
+    startImageGlowPulse,
+    stopImageGlowPulse,
+    showDescription
+  };
+}
